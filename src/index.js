@@ -1,23 +1,97 @@
-import express from 'express'
-const app = express()
-const port = 3000
+import express from "express";
+
+const app = express();
+app.use(express.json());
+const port = 3000;
 
 const livros = [
-  { id: 1, title: 'Dom Casmurro', author: 'Machado de Assis', year: 1899, genre: 'Romance', pages: 256, isbn: '978-85-359-0277-4', summary: 'Narrativa em primeira pessoa sobre ciúme e memória.' },
-  { id: 2, title: 'O Alquimista', author: 'Paulo Coelho', year: 1988, genre: 'Ficção/Autoajuda', pages: 208, isbn: '978-85-65577-36-2', summary: 'Jornada de um jovem pastor em busca de seu destino.' },
-  { id: 3, title: '1984', author: 'George Orwell', year: 1949, genre: 'Distopia', pages: 328, isbn: '978-0-452-28423-4', summary: 'Sociedade totalitária e vigilância constante.' },
-  { id: 4, title: 'Sapiens', author: 'Yuval Noah Harari', year: 2011, genre: 'História/Ciência', pages: 443, isbn: '978-0-06-231609-7', summary: 'História da humanidade desde a pré-história até hoje.' },
-  { id: 5, title: 'Clean Code', author: 'Robert C. Martin', year: 2008, genre: 'Programação/Técnico', pages: 464, isbn: '978-0-13-235088-4', summary: 'Princípios e práticas para escrever código limpo.' }
-]
+	{
+		id: 1,
+		title: "Dom Casmurro",
+	},
+	{
+		id: 2,
+		title: "O Alquimista",
+	},
+	{
+		id: 3,
+		title: "1984",
+	},
+	{
+		id: 4,
+		title: "Sapiens",
+	},
+	{
+		id: 5,
+		title: "Clean Code",
+	},
+];
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const buscaLivros = (id) => {
+	const index = livros.findIndex((livro) => livro.id === Number(id));
+	return index;
+};
 
-app.get('/livros',(req, res) => {
-  res.status(200).send(livros)
-})
+app.get("/", (_req, res) => {
+	res.send("Hello World!");
+});
+
+app.get("/livros", (_req, res) => {
+	res.status(200).send(livros);
+});
+
+app.post("/livros", (req, res) => {
+	const data = req.body;
+	livros.push(data);
+
+	res.status(201).send("Livro criado com sucesso!");
+});
+
+app.delete("/livros/:id", (req, res) => {
+	const { id } = req.params;
+
+	const index = buscaLivros(id);
+
+	if (index !== -1) {
+		livros.splice(index, 1);
+		res.status(200).send("Livro deletado com sucesso");
+	} else {
+		res.status(404).send("Livro não encontrado");
+	}
+});
+
+app.get("/livros/:id", (req, res) => {
+	const { id } = req.params;
+
+	const index = buscaLivros(id);
+
+	const findLivro = livros[index];
+
+	if (index !== -1) {
+		console.log("no true");
+		res.status(200).send(findLivro);
+	} else {
+		console.log("no false");
+		res.status(404).send({ error: "Livro nao encontrado" });
+	}
+});
+
+app.put("/livros/:id", (req, res) => {
+	const { id } = req.params;
+	const { title } = req.body;
+
+	const index = buscaLivros(id);
+
+	const findLivro = livros[index];
+
+	if (index !== -1) {
+		findLivro.title = title;
+		res.status(201).send(findLivro);
+	} else {
+		res.status(404).send({ error: "Livro nao encontrado" });
+	}
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+	console.log(`Example app listening on port http://localhost:${port}`);
+});

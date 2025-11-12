@@ -1,0 +1,36 @@
+{
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "space",
+		"lineWidth": 80,
+		"indentWidth": 2
+	},
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "asNeeded",
+			"quoteStyle": "single",
+			"semicolons": "asNeeded"
+		}
+	},
+	"linter": {
+		"enabled": false,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "warn"
+			}
+		}
+	},
+	"files": {
+		"ignore": [
+			"node_modules",
+			"dist",
+			"build",
+			"coverage",
+			"public",
+			"tsconfig.json",
+			"tsconfig.node.json",
+			"tsconfig.app.json"
+		]
+	}
+}
